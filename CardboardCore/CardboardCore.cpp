@@ -3,6 +3,6 @@ import App;
 int main()
 {
 	App* app = new App();
-	app->run();
+	//app->run();
 	return 0;
 }

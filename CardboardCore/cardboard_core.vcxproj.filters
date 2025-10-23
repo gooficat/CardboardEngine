@@ -22,6 +22,9 @@
     <ClCompile Include="OpenGL.ixx">
       <Filter>Source Files\Render</Filter>
     </ClCompile>
+    <ClCompile Include="RenderContext.ixx">
+      <Filter>Source Files\Render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Resources">
