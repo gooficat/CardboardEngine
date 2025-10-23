@@ -1,6 +1,8 @@
 export module Window;
 import std;
 
+import EventHandler;
+
 import Logger;
 
 import "Api.h";
@@ -18,10 +20,9 @@ public:
 export class Window {
 public:
 	Window(const WindowSpec& spec, const std::unique_ptr<Logger>& logger) {
-#ifdef _WIN32
 		instance_handle = GetModuleHandle(0);
 		window_class = {
-			.lpfnWndProc = Window::WindowProc,
+			.lpfnWndProc = EventHandler::WindowProc,
 			.hInstance = instance_handle,
 			.lpszClassName = (wchar_t*)spec.title
 		};
@@ -31,7 +32,7 @@ public:
 			0,
 			spec.title,
 			spec.title,
-			WS_OVERLAPPEDWINDOW,
+			WS_OVERLAPPEDWINDOW | WS_EX_COMPOSITED,
 			CW_USEDEFAULT, CW_USEDEFAULT,
 			spec.width, spec.height,
 			NULL,
@@ -48,20 +49,9 @@ public:
 	void show() {
 		ShowWindow(window_handle, SW_SHOW);
 	}
-
-	static LRESULT CALLBACK WindowProc(HWND h_wnd, UINT u_msg, WPARAM w_param, LPARAM l_param) {
-		switch (u_msg) {
-		case WM_CLOSE:
-			PostQuitMessage(0);
-			return 0;
-		default:
-			return DefWindowProcA(h_wnd, u_msg, w_param, l_param);
-		}
-	}
 	HWND& getHandle() {
 		return window_handle;
 	}
-#endif
 private:
 	static Window* active_instance;
 #ifdef _WIN32

@@ -1,11 +1,11 @@
 export module App;
 
+import EventHandler;
 import Window;
 import RenderContext;
+import Renderer;
 
 import Logger;
-
-import OpenGL;
 
 import <memory>;
 
@@ -16,6 +16,10 @@ public:
 		internal_logger(std::make_unique<Logger>(
 			"C:\\Projects\\CardboardEngine\\x64\\Debug\\logs\\internal_log.txt"
 		)) {
+		this->event_handler = std::make_unique<EventHandler>(
+			
+		);
+		
 		this->window = std::make_unique<Window>(
 			WindowSpec {
 				" ",
@@ -34,22 +38,26 @@ public:
 		
 		App::active_instance = this;
 
-		if (!GL::load(this->internal_logger)) {
-			delete this;
-		}
-		else {
-			run();
-		}
+		renderer = std::make_unique<OpenGL_Renderer>(
+			
+		);
+
+		run();
 	}
 
 	void run() {
 		internal_logger->log("Application launched, now running.", LOG_MESSAGE);
+
 		while (true);
 	}
 	
+	std::unique_ptr<EventHandler> event_handler;
+
 	std::unique_ptr<Window> window;
 
 	std::unique_ptr<RenderContext> render_context;
+
+	std::unique_ptr<Renderer> renderer;
 
 	inline static App *active_instance;
 private:
