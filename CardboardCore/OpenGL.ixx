@@ -19,6 +19,8 @@ export namespace GL {
 	using Int = int32_t;
 	using Boolean = bool;
 	using Float = float;
+	using Bitfield = uint32_t;
+
 	void * loadFunction(const char* name) {
 		void *p = (void *)wglGetProcAddress(name);
 		if (p == 0 ||
@@ -35,12 +37,16 @@ export namespace GL {
 	Uint (*createShader)(Enum type) = NULL;
 	Uint (*genBuffers)(Sizei count, Uint *buffers) = NULL;
 	void (*viewport)(Int x, Int y, Sizei w, Sizei h) = NULL;
+	void (*clearColor)(Float r, Float g, Float b, Float a) = NULL;
+	void (*clear)(Bitfield mask) = NULL;
 
 	bool load(const std::unique_ptr<Logger>& logger) {
 		ASRT_PROC(useProgram, "glUseProgram");
 		ASRT_PROC(createShader, "glCreateShader");
 		ASRT_PROC(genBuffers, "glGenBuffers");
 		ASRT_PROC(viewport, "glViewport");
+		ASRT_PROC(clearColor, "glClearColor");
+		ASRT_PROC(clear, "glClear");
 
 		return true;
 	}

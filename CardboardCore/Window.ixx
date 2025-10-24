@@ -1,7 +1,7 @@
 export module Window;
 import std;
 
-import EventHandler;
+//import EventHandler;
 
 import Logger;
 
@@ -19,10 +19,11 @@ public:
 
 export class Window {
 public:
-	Window(const WindowSpec& spec, const std::unique_ptr<Logger>& logger) {
+	Window(const WindowSpec& spec, LRESULT (*EventProcedure)(HWND, UINT, WPARAM, LPARAM), const std::unique_ptr<Logger>& logger) :
+		should_close(false) {
 		instance_handle = GetModuleHandle(0);
 		window_class = {
-			.lpfnWndProc = EventHandler::WindowProc,
+			.lpfnWndProc = EventProcedure,
 			.hInstance = instance_handle,
 			.lpszClassName = (wchar_t*)spec.title
 		};
@@ -44,19 +45,34 @@ public:
 			logger->log("The window failed to initialize.", LOG_ERROR);
 			return;
 		}
+
+		this->width = spec.width;
+		this->height = spec.height;
 	}
 
 	void show() {
 		ShowWindow(window_handle, SW_SHOW);
 	}
+
+	uint32_t getWidth() {
+		return width;
+	}
+
+	uint32_t getHeight() {
+		return height;
+	}
+
 	HWND& getHandle() {
 		return window_handle;
 	}
+	bool should_close;
 private:
 	static Window* active_instance;
-#ifdef _WIN32
+
 	HWND window_handle;
 	HINSTANCE instance_handle;
 	WNDCLASS window_class;
-#endif
+
+	size_t width;
+	size_t height;
 };

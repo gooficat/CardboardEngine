@@ -3,7 +3,7 @@ export module App;
 import EventHandler;
 import Window;
 import RenderContext;
-import Renderer;
+import OpenGL;
 
 import Logger;
 
@@ -26,6 +26,7 @@ public:
 				640,
 				360
 			},
+			EventHandler::MessageHandler,
 			this->internal_logger
 		);
 		this->render_context = std::make_unique<RenderContext>(
@@ -38,9 +39,6 @@ public:
 		
 		App::active_instance = this;
 
-		renderer = std::make_unique<OpenGL_Renderer>(
-			
-		);
 
 		run();
 	}
@@ -48,7 +46,14 @@ public:
 	void run() {
 		internal_logger->log("Application launched, now running.", LOG_MESSAGE);
 
-		while (true);
+		GL::viewport(0, 0, window->getWidth(), window->getHeight());
+		GL::clearColor(0.2f, 0.4f, 0.5f, 1.0f);
+
+		while (!event_handler->shouldQuit()) {
+			GL::clear(0x00004100);
+
+			render_context->swapBuffers();
+		}
 	}
 	
 	std::unique_ptr<EventHandler> event_handler;
@@ -56,8 +61,6 @@ public:
 	std::unique_ptr<Window> window;
 
 	std::unique_ptr<RenderContext> render_context;
-
-	std::unique_ptr<Renderer> renderer;
 
 	inline static App *active_instance;
 private:

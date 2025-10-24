@@ -2,6 +2,7 @@ export module RenderContext;
 
 import Window;
 import Logger;
+import OpenGL;
 
 import <Windows.h>;
 import std;
@@ -17,7 +18,7 @@ public:
 		pixelformat_desc = {
 			.nSize = sizeof(pixelformat_desc),
 			.nVersion = 1,
-			.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL,
+			.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER,
 			.iPixelType = PFD_TYPE_RGBA,
 			.cColorBits = color_bits,
 			.cDepthBits = depth_bits
@@ -35,6 +36,12 @@ public:
 
 		rendercontext_handle = wglCreateContext(devicecontext_handle);
 		wglMakeCurrent(devicecontext_handle, rendercontext_handle);
+
+		GL::load(logger);
+	}
+
+	void swapBuffers() {
+		SwapBuffers(devicecontext_handle);
 	}
 private:
 	int pixelformat;

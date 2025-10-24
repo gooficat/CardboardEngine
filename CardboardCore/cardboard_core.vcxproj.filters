@@ -28,9 +28,6 @@
     <ClCompile Include="EventHandler.ixx">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer.ixx">
-      <Filter>Source Files\Render</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Resources">

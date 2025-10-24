@@ -1,8 +1,5 @@
 import App;
 
-int main()
-{
+int main() {
 	App* app = new App();
-	//app->run();
-	return 0;
 }

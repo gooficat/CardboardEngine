@@ -1,6 +1,10 @@
 export module EventHandler;
 import <Windows.h>;
 import <stdint.h>;
+import std;
+
+import Window;
+import RenderContext;
 
 export enum EventType {
 	None = 0,
@@ -10,38 +14,109 @@ export enum EventType {
 	MouseMove, MouseScroll
 };
 
-void DEFAULT_EVENT_DUMP(int64_t w_param, int64_t l_param) {
+union PARAM_BYTE {
+	WPARAM w;
+	LPARAM l;
+	uint32_t U[2];
+	BYTE b[8];
+};
 
-}
+export enum class KeyCode {
+	ESC = 0x1B,
+	SPACE = 0x20,
+	N0 = 0x30,
+	N1,
+	N2,
+	N3,
+	N4,
+	N5,
+	N6,
+	N7,
+	N8,
+	N9,
+	A = 0x41,
+	B,
+	C,
+	D,
+	E,
+	F,
+	G,
+	H,
+	I,
+	J,
+	K,
+	L,
+	M,
+	N,
+	O,
+	P,
+	Q,
+	R,
+	S,
+	T,
+	U,
+	V,
+	W,
+	X,
+	Y,
+	Z,
+	LSHIFT = 0xA0,
+	RSHIFT,
+	LCTRL,
+	RCTRL
+};
 
 export class EventHandler {
 public:
 	EventHandler() {
-		onKeyDown = DEFAULT_EVENT_DUMP;
+		onKeyDown = [](uint8_t, int64_t){};
+		onKeyUp = [](int64_t, int64_t) {};
+
+		onMouseButtonDown = [](int64_t, int64_t) {};
+		onMouseButtonUp = [](int64_t, int64_t) {};
+
+		quit_requested = false;
+		active_instance = this;
 	}
 
-	static LRESULT CALLBACK WindowProc(HWND h_wnd, UINT u_msg, WPARAM w_param, LPARAM l_param) {
+	static LRESULT CALLBACK MessageHandler(HWND h_wnd, UINT u_msg, WPARAM w_param, LPARAM l_param) {
+		PARAM_BYTE W = { .w = w_param };
+		PARAM_BYTE L = { .l = l_param };
 		switch (u_msg) {
 		case WM_CLOSE:
-
+			EventHandler::active_instance->quit_requested = true;
 			return 0;
 		case WM_SIZE:
 
 			return 0;
-		case WM_KEYDOWN:
-			onKeyDown(w_param, l_param);
-			return 0;
-		case WM_KEYUP:
-			break;
 		default:
 			return DefWindowProcA(h_wnd, u_msg, w_param, l_param);
 		}
 	}
-	bool isKeyDown(uint32_t code, uint32_t flags) {
-		
+	bool isKeyDown(uint8_t code, int64_t flags) {
+		return false;
 	}
 
-	static void (*onKeyDown)(int64_t code, int64_t flags);
+	bool isMouseButtonDown(int64_t code, int64_t flags) {
+		return false;
+	}
+	
+	bool shouldQuit() {
+		return quit_requested;
+	}
+	
+	void requestQuit() {
+		quit_requested = true;
+	}
+
+	inline static void (*onKeyDown)(uint8_t code, int64_t flags);
+	inline static void (*onKeyUp)(int64_t code, int64_t flags);
+
+	inline static void (*onMouseButtonDown)(int64_t code, int64_t flags);
+	inline static void (*onMouseButtonUp)(int64_t code, int64_t flags);
+
 private:
-	EventHandler* active_instance;
+	inline static EventHandler* active_instance;
+
+	bool quit_requested;
 };

@@ -136,7 +136,6 @@
     <ClCompile Include="Object.ixx" />
     <ClCompile Include="OpenGL.ixx" />
     <ClCompile Include="RenderContext.ixx" />
-    <ClCompile Include="Renderer.ixx" />
     <ClCompile Include="Scene.ixx" />
     <ClCompile Include="Window.ixx" />
   </ItemGroup>
