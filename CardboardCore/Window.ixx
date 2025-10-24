@@ -19,8 +19,9 @@ public:
 
 export class Window {
 public:
-	Window(const WindowSpec& spec, LRESULT (*EventProcedure)(HWND, UINT, WPARAM, LPARAM), const std::unique_ptr<Logger>& logger) :
+	Window(const WindowSpec& spec, LRESULT(*EventProcedure)(HWND, UINT, WPARAM, LPARAM), const std::unique_ptr<Logger>& logger) :
 		should_close(false) {
+		Window::active_instance = this;
 		instance_handle = GetModuleHandle(0);
 		window_class = {
 			.lpfnWndProc = EventProcedure,
@@ -66,13 +67,14 @@ public:
 		return window_handle;
 	}
 	bool should_close;
+	inline static Window* active_instance;
+
+	uint32_t width;
+	uint32_t height;
 private:
-	static Window* active_instance;
 
 	HWND window_handle;
 	HINSTANCE instance_handle;
 	WNDCLASS window_class;
 
-	size_t width;
-	size_t height;
 };

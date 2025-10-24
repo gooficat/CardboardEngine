@@ -53,6 +53,7 @@ public:
 			GL::clear(0x00004100);
 
 			render_context->swapBuffers();
+			event_handler->pollEvents();
 		}
 	}
 	

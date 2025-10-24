@@ -82,23 +82,24 @@ public:
 	static LRESULT CALLBACK MessageHandler(HWND h_wnd, UINT u_msg, WPARAM w_param, LPARAM l_param) {
 		PARAM_BYTE W = { .w = w_param };
 		PARAM_BYTE L = { .l = l_param };
+		static PAINTSTRUCT paint_struct;
 		switch (u_msg) {
 		case WM_CLOSE:
 			EventHandler::active_instance->quit_requested = true;
+			Window::active_instance->should_close = true;
+			PostQuitMessage(0);
 			return 0;
 		case WM_SIZE:
-
+			Window::active_instance->width = LOWORD(l_param);
+			Window::active_instance->height = HIWORD(l_param);
+			RenderContext::active_instance->resize(LOWORD(l_param), HIWORD(l_param));
 			return 0;
 		default:
 			return DefWindowProcA(h_wnd, u_msg, w_param, l_param);
 		}
 	}
-	bool isKeyDown(uint8_t code, int64_t flags) {
-		return false;
-	}
-
-	bool isMouseButtonDown(int64_t code, int64_t flags) {
-		return false;
+	bool isButtonDown(uint8_t code) {
+		return GetKeyState(code);
 	}
 	
 	bool shouldQuit() {
@@ -107,6 +108,14 @@ public:
 	
 	void requestQuit() {
 		quit_requested = true;
+	}
+
+	void pollEvents() {
+		static MSG message;
+		while (GetMessageA(&message, NULL, 0, 0)) {
+			TranslateMessage(&message);
+			DispatchMessageA(&message);
+		}
 	}
 
 	inline static void (*onKeyDown)(uint8_t code, int64_t flags);

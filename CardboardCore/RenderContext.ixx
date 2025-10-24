@@ -6,10 +6,12 @@ import OpenGL;
 
 import <Windows.h>;
 import std;
+import <stdint.h>;
 
 export class RenderContext {
 public:
 	RenderContext(HWND& window_handle, std::unique_ptr<Logger>& logger, BYTE color_bits, BYTE depth_bits) {
+		RenderContext::active_instance = this;
 
 		devicecontext_handle = GetDC(window_handle);
 
@@ -43,6 +45,12 @@ public:
 	void swapBuffers() {
 		SwapBuffers(devicecontext_handle);
 	}
+
+	void resize(uint32_t width, uint32_t height) {
+		GL::viewport(0, 0, width, height);
+	}
+
+	inline static RenderContext *active_instance;
 private:
 	int pixelformat;
 	PIXELFORMATDESCRIPTOR pixelformat_desc;
