@@ -1,3 +1,12 @@
 export module Scene;
+import std;
 
-export void MyFunc();
+import Object;
+
+export class Scene {
+public:
+
+	
+private:
+
+};

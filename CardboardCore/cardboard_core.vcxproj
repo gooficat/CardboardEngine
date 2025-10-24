@@ -106,7 +106,11 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdclatest</LanguageStandard_C>
-      <BuildStlModules>true</BuildStlModules>
+      <BuildStlModules>false</BuildStlModules>
+      <UseDynamicDebugging>false</UseDynamicDebugging>
+      <Optimization>Disabled</Optimization>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <EnableModules>false</EnableModules>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -129,10 +133,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="App.ixx" />
+    <ClCompile Include="App.ixx">
+      <EnableModules Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableModules>
+    </ClCompile>
     <ClCompile Include="CardboardCore.cpp" />
     <ClCompile Include="EventHandler.ixx" />
     <ClCompile Include="Logger.ixx" />
+    <ClCompile Include="Mathematics.ixx" />
     <ClCompile Include="Object.ixx" />
     <ClCompile Include="OpenGL.ixx" />
     <ClCompile Include="RenderContext.ixx" />

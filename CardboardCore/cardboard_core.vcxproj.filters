@@ -28,6 +28,9 @@
     <ClCompile Include="EventHandler.ixx">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Mathematics.ixx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Resources">

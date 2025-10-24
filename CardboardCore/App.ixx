@@ -7,6 +7,8 @@ import OpenGL;
 
 import Logger;
 
+import Object;
+
 import <memory>;
 
 
@@ -16,6 +18,8 @@ public:
 		internal_logger(std::make_unique<Logger>(
 			"C:\\Projects\\CardboardEngine\\x64\\Debug\\logs\\internal_log.txt"
 		)) {
+		App::active_instance = this;
+
 		this->event_handler = std::make_unique<EventHandler>(
 			
 		);
@@ -23,8 +27,8 @@ public:
 		this->window = std::make_unique<Window>(
 			WindowSpec {
 				" ",
-				640,
-				360
+				1280,
+				720
 			},
 			EventHandler::MessageHandler,
 			this->internal_logger
@@ -36,9 +40,6 @@ public:
 			24
 		);
 		window->show();
-		
-		App::active_instance = this;
-
 
 		run();
 	}
