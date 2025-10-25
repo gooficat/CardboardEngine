@@ -111,11 +111,10 @@ public:
 	}
 
 	void pollEvents() {
-		static MSG message;
-		while (GetMessageA(&message, NULL, 0, 0)) {
-			TranslateMessage(&message);
-			DispatchMessageA(&message);
-		}
+		//static MSG message;
+		//GetMessageA(&message, NULL, 0, 0);
+		//	TranslateMessage(&message);
+		//	DispatchMessageA(&message);
 	}
 
 	inline static void (*onKeyDown)(uint8_t code, int64_t flags);
