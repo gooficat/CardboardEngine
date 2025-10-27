@@ -57,25 +57,26 @@ public:
 
 		const GL::Char *vertexShaderSource = R"(#version 330 core
 			layout (location = 0) in vec3 a_pos;
+			layout (location = 1) in vec2 a_tex_coords;
 
 			uniform mat4 model;
 			uniform mat4 view;
 			uniform mat4 projection;
 			
-			out vec2 texPos;
+			out vec2 tex_pos;
 
 			void main() {
 				gl_Position = projection * view * model * vec4(a_pos, 1.0f);
 
-				texPos = a_pos.xy + vec2(0.5f, 0.5f);
+				tex_pos = a_tex_coords;
 			}
 		)";
 		const GL::Char *fragmentShaderSource = R"(#version 330 core
 			out vec4 color;
 			uniform sampler2D diffuse;
-			in vec2 texPos;
+			in vec2 tex_pos;
 			void main() {
-				color = vec4(texture(diffuse, texPos).rgb, 1.0f);
+				color = texture(diffuse, tex_pos);
 			}
 		)";
 		Shader test_shader(vertexShaderSource, fragmentShaderSource);
@@ -90,20 +91,20 @@ public:
 
 		Texture tex("C:/Projects/CardboardEngine/CardboardCore/resources/DiamondPlate009_1K-PNG_Color.bmp", "diffuse", internal_logger);
 
-		std::vector<GL::Float> vertices = {
-			-1, -1, 0,
-			 1, -1, 0,
-			 0,  1, 0
-		}; 
-		//std::vector<Vertex> verts = {
-		//	{{-1, -1, 0}, {0, 0}},
-		//	{{ 1, -1, 0}, {1, 0}},
-		//	{{ 0,  1, 0}, {.5,1}}
-		//};
+		//std::vector<GL::Float> vertices = {
+		//	-1, -1, 0,
+		//	 1, -1, 0,
+		//	 0,  1, 0
+		//}; 
+		std::vector<Vertex> positions = {
+			{{-1, -1, 0}, {0, 0}},
+			{{ 1, -1, 0}, {1, 0}},
+			{{ 0,  1, 0}, {.5,1}}
+		};
 		std::vector<GL::Uint> indices = {
 			0, 1, 2
 		};
-		Mesh mesh(vertices, indices);
+		Mesh mesh(positions, indices);
 		
 		//GL::genVertexArrays(1, &test_vao);
 		//GL::bindVertexArray(test_vao);
