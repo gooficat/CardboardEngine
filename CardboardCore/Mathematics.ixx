@@ -122,17 +122,16 @@ public:
 		});
 	}
 	Mat4 operator * (Mat4 b) {
-		Mat4 result = Mat4::identity();
-		static int hasPrintedOut = 0;
-		hasPrintedOut++;
+		Mat4 result(0);
+		//static int hasPrintedOut = 0;
+		//hasPrintedOut++;
 
 		for (int i = 0; i != 4; ++i) {
 			for (int j = 0; j != 4; ++j) {
-				result[i][j] = 0;
 				for (int k = 0; k != 4; ++k) {
 					result[i][j] += this->data[i][k] * b[k][j];
-					if (hasPrintedOut == 100)
-						std::cout << this->data[i][k] << " " << b[k][j] << std::endl;
+					//if (hasPrintedOut == 100)
+					//	std::cout << this->data[i][k] << " " << b[k][j] << std::endl;
 				}
 			}
 
