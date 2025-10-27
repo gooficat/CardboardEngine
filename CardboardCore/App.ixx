@@ -25,6 +25,8 @@ public:
 			
 		);
 		
+		PixelFormat pixel_format = RenderContext::generateFormat();
+
 		this->window = std::make_unique<Window>(
 			WindowSpec {
 				" ",
@@ -37,8 +39,7 @@ public:
 		this->render_context = std::make_unique<RenderContext>(
 			window->getHandle(),
 			this->internal_logger,
-			24,
-			24
+			window->getFormat()
 		);
 		window->show();
 		
@@ -65,7 +66,7 @@ public:
 			uniform mat4 projection;
 
 			void main() {
-				gl_Position = projection * view * model * vec4(a_pos + vec3(0.5f, 0.0f, 0.0f), 1.0f);
+				gl_Position = projection * model * vec4(a_pos, 1.0f);
 			}
 		)";
 		const GL::Char *fragmentShaderSource = R"(
@@ -80,10 +81,8 @@ public:
 		GL::compileShader(test_vert);
 
 		Transform test_transform;
-		test_transform.position.x = -0.5f;
-		test_transform.rotation.x = -0.9f;
 
-		test_projection = Mat4::simpleOrtho(2, 2, 2);//orthographic(0, 2, 0, 2, 0, 2);
+		test_projection = Mat4::simpleOrtho(4/3.0f, 1, 1);//orthographic(0, 2, 0, 2, 0, 2);
 		test_view = Mat4::identity();
 		test_model = test_transform.getMatrix();
 
@@ -106,16 +105,17 @@ public:
 		GL::bindVertexArray(0);
 
 		while (!event_handler->shouldQuit()) {
-			test_transform.rotation.z += 0.001f;
-			test_transform.position.x += 0.0001f;
+			test_transform.rotation.x += 0.001f;
+			test_transform.rotation.y += 0.001f;
+			test_transform.position.y += 0.0001f;
+			test_model = test_transform.getMatrix();
 			GL::clear(0x00004100);
 
 			GL::useProgram(test_shaderprogram);
-			test_model = test_transform.getMatrix();
 
-			GL::uniformMatrix4fv(GL::getUniformLocation(test_shaderprogram, "model"), 1, 0, &test_model.x1);
-			GL::uniformMatrix4fv(GL::getUniformLocation(test_shaderprogram, "view"), 1, 0, &test_view.x1);
-			GL::uniformMatrix4fv(GL::getUniformLocation(test_shaderprogram, "projection"), 1, 0, &test_projection.x1);
+			GL::uniformMatrix4fv(GL::getUniformLocation(test_shaderprogram, "model"), 1, 0, test_model.get());
+			GL::uniformMatrix4fv(GL::getUniformLocation(test_shaderprogram, "view"), 1, 0, test_view.get());
+			GL::uniformMatrix4fv(GL::getUniformLocation(test_shaderprogram, "projection"), 1, 0, test_projection.get());
 
 			GL::bindVertexArray(test_vao);
 			GL::drawArrays(0x0004, 0, 3);

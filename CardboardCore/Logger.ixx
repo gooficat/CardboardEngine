@@ -26,6 +26,7 @@ export enum LogType {
 export class Logger {
 public:
 	Logger(const std::string& file_path) {
+		Logger::active_instance = this;
 		log_file.open(file_path);
 		console_handle = GetStdHandle(STD_OUTPUT_HANDLE);
 	}
@@ -67,6 +68,7 @@ public:
 		log_file << log << "\n\n";
 		SetConsoleTextAttribute(console_handle, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 	}
+	inline static Logger* active_instance;
 private:
 	std::ofstream log_file;
 	HANDLE console_handle;

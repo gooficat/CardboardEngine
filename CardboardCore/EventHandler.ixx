@@ -14,13 +14,6 @@ export enum EventType {
 	MouseMove, MouseScroll
 };
 
-union PARAM_BYTE {
-	WPARAM w;
-	LPARAM l;
-	uint32_t U[2];
-	BYTE b[8];
-};
-
 export enum class KeyCode {
 	ESC = 0x1B,
 	SPACE = 0x20,
@@ -80,8 +73,6 @@ public:
 	}
 
 	static LRESULT CALLBACK MessageHandler(HWND h_wnd, UINT u_msg, WPARAM w_param, LPARAM l_param) {
-		PARAM_BYTE W = { .w = w_param };
-		PARAM_BYTE L = { .l = l_param };
 		static PAINTSTRUCT paint_struct;
 		switch (u_msg) {
 		case WM_CLOSE:
@@ -111,10 +102,11 @@ public:
 	}
 
 	void pollEvents() {
-		//static MSG message;
-		//GetMessageA(&message, NULL, 0, 0);
-		//	TranslateMessage(&message);
-		//	DispatchMessageA(&message);
+		static MSG message;
+		if (PeekMessageA(&message, NULL, 0, 0, PM_REMOVE)) {
+			TranslateMessage(&message);
+			DispatchMessageA(&message);
+		}
 	}
 
 	inline static void (*onKeyDown)(uint8_t code, int64_t flags);

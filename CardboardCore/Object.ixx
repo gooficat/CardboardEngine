@@ -11,16 +11,18 @@ public:
 	Vec3 scale;
 
 	Transform() :
-	position(0,0,0), rotation(0,0,0), scale(1,1,1) {
+		position({ 0, 0, 0 }), rotation({ 0, 0, 0 }), scale({ 1, 1, 1 }) {
 
 	}
 
 	Mat4 getMatrix() {
-		Mat4 m = Mat4::translate(position);
-		m = m * Mat4::rotateZ(rotation.z);
-		m = m * Mat4::rotateY(rotation.y);
-		m = m * Mat4::rotateX(rotation.x);
-		m = m * Mat4::scale(scale);
+		Mat4 m = Mat4::identity();
+		//m = m * Mat4::translate(position);
+		m = m * Mat4::rotationX(rotation.x);
+		//m = m * Mat4::rotationY(rotation.y);
+		//m = m * Mat4::rotationZ(rotation.z);
+		//m = ;
+		//m = Mat4::scale(scale) * m;
 
 		return m;
 	}
