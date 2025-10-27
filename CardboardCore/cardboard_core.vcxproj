@@ -144,6 +144,7 @@
     <ClCompile Include="OpenGL.ixx" />
     <ClCompile Include="RenderContext.ixx" />
     <ClCompile Include="Scene.ixx" />
+    <ClCompile Include="Shader.ixx" />
     <ClCompile Include="Window.ixx" />
   </ItemGroup>
   <ItemGroup>

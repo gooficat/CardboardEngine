@@ -9,6 +9,7 @@ import Logger;
 
 import Object;
 import Mathematics;
+import Shader;
 
 import <memory>;
 
@@ -74,26 +75,13 @@ public:
 				gl_FragColor = vec4(1.0f, 0.4f, 0.8f, 1.0f);
 			}
 		)";
-
-		test_shaderprogram = GL::createProgram();
-		GL::Uint test_vert = GL::createShader(0x8B31);
-		GL::shaderSource(test_vert, 1, &vertexShaderSource, NULL);
-		GL::compileShader(test_vert);
+		Shader test_shader(vertexShaderSource, fragmentShaderSource);
 
 		Transform test_transform;
 
 		test_projection = Mat4::simpleOrtho(4/3.0f, 1, 1);//orthographic(0, 2, 0, 2, 0, 2);
 		test_view = Mat4::identity();
 		test_model = test_transform.getMatrix();
-
-		GL::Uint test_frag = GL::createShader(0x8B30);
-		GL::shaderSource(test_frag, 1, &fragmentShaderSource, NULL);
-		GL::compileShader(test_frag);
-
-		GL::attachShader(test_shaderprogram, test_vert);
-		GL::attachShader(test_shaderprogram, test_frag);
-		GL::linkProgram(test_shaderprogram);
-		
 
 		GL::genVertexArrays(1, &test_vao);
 		GL::bindVertexArray(test_vao);
@@ -111,11 +99,12 @@ public:
 			test_model = test_transform.getMatrix();
 			GL::clear(0x00004100);
 
-			GL::useProgram(test_shaderprogram);
+			test_shader.use();
 
-			GL::uniformMatrix4fv(GL::getUniformLocation(test_shaderprogram, "model"), 1, 0, test_model.get());
-			GL::uniformMatrix4fv(GL::getUniformLocation(test_shaderprogram, "view"), 1, 0, test_view.get());
-			GL::uniformMatrix4fv(GL::getUniformLocation(test_shaderprogram, "projection"), 1, 0, test_projection.get());
+			test_shader.setMat4("model", test_model);
+
+			test_shader.setMat4("view", test_view);
+			test_shader.setMat4("projection", test_projection);
 
 			GL::bindVertexArray(test_vao);
 			GL::drawArrays(0x0004, 0, 3);
@@ -138,7 +127,7 @@ private:
 	std::unique_ptr<Logger> internal_logger;
 
 
-	GL::Uint test_buffer, test_vao, test_shaderprogram;
+	GL::Uint test_buffer, test_vao;
 	Mat4 test_model, test_view, test_projection;
 
 };

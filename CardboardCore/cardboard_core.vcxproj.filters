@@ -31,6 +31,9 @@
     <ClCompile Include="Mathematics.ixx">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Shader.ixx">
+      <Filter>Source Files\Render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Resources">

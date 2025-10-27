@@ -18,7 +18,7 @@ public:
 	float& operator[] (uint8_t i) {
 		return data[i];
 	}
-	float* get() {
+	float *get() {
 		return &data[0];
 	}
 //protected:
@@ -121,7 +121,7 @@ public:
 			Vec<4>({ t.x, t.y, t.z, 1 })
 		});
 	}
-	Mat4 operator * (Mat4 b) {
+	Mat4 operator * (Mat4 b) { // this does not allow me to pass as a const reference
 		Mat4 result(0);
 		//static int hasPrintedOut = 0;
 		//hasPrintedOut++;
