@@ -64,7 +64,8 @@ export namespace GL {
 	void (*vertexAttribPointer)(Uint index, Int size, Enum type, Boolean normalized, Sizei stride, const void *pointer) = NULL;
 	void (*enableVertexAttribArray)(Uint index) = NULL;
 
-	void (*drawArrays)(Enum mode, Int offset, Sizei count) = NULL;
+	//void (*drawArrays)(Enum mode, Int offset, Sizei count) = NULL;
+	void (*drawElements)(Enum mode, Sizei count, Enum type, const void *indices) = NULL;
 
 	void (*genTextures)(Sizei count, Uint* texture) = NULL;
 	void (*bindTexture)(Enum target, Uint texture) = NULL;
@@ -103,7 +104,8 @@ export namespace GL {
 		ASRT_PROC(vertexAttribPointer, "glVertexAttribPointer")
 		ASRT_PROC(enableVertexAttribArray, "glEnableVertexAttribArray")
 
-		ASRT_PROC(drawArrays, "glDrawArrays")
+		//ASRT_PROC(drawArrays, "glDrawArrays")
+		ASRT_PROC(drawElements, "glDrawElements")
 
 		ASRT_PROC(genTextures, "glGenTextures")
 		ASRT_PROC(bindTexture, "glBindTexture")

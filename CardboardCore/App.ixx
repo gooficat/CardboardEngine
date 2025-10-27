@@ -11,6 +11,7 @@ import Object;
 import Mathematics;
 import Shader;
 import Texture;
+import Mesh;
 
 import <memory>;
 
@@ -55,7 +56,7 @@ public:
 		GL::clearColor(0.2f, 0.4f, 0.5f, 1.0f);
 
 
-		GL::Float vertices[] = {
+		std::vector<GL::Float> vertices = {
 			-0.5f, -0.5f, 0.0f,
 			0.5f, -0.5f, 0.0f,
 			0.0f, 0.5f, 0.0f
@@ -92,14 +93,21 @@ public:
 		test_model = test_transform.getMatrix();
 
 		Texture tex("C:/Projects/CardboardEngine/CardboardCore/resources/DiamondPlate009_1K-PNG_Color.bmp", internal_logger);
-		GL::genVertexArrays(1, &test_vao);
-		GL::bindVertexArray(test_vao);
-		GL::genBuffers(1, &test_buffer);
-		GL::bindBuffer(0x8892, test_buffer);
-		GL::bufferData(0x8892, 9 * sizeof(GL::Float), &vertices[0], 0x88E4);
-		GL::enableVertexAttribArray(0);
-		GL::vertexAttribPointer(0, 3, 0x1406, 0, 3 * sizeof(GL::Float), (void*)0);
-		GL::bindVertexArray(0);
+		std::vector<GL::Uint> indices = {
+			0, 1, 2
+		};
+		Mesh mesh(vertices, indices);
+		
+		//GL::genVertexArrays(1, &test_vao);
+		//GL::bindVertexArray(test_vao);
+		//GL::genBuffers(1, &test_buffer);
+		//GL::bindBuffer(0x8892, test_buffer);
+		//GL::bufferData(0x8892, 9 * sizeof(GL::Float), &vertices[0], 0x88E4);
+		//GL::enableVertexAttribArray(0);
+		//GL::vertexAttribPointer(0, 3, 0x1406, 0, 3 * sizeof(GL::Float), (void*)0);
+		//GL::bindVertexArray(0);
+
+
 
 		while (!event_handler->shouldQuit()) {
 			test_transform.rotation.x += 0.001f;
@@ -117,9 +125,11 @@ public:
 			test_shader.setMat4("view", test_view);
 			test_shader.setMat4("projection", test_projection);
 
-			GL::bindVertexArray(test_vao);
-			GL::drawArrays(0x0004, 0, 3);
+			//GL::bindVertexArray(test_vao);
+			//GL::drawArrays(0x0004, 0, 3);
 			//std::cout << "I'm in a loop!" << std::endl;
+
+			mesh.draw(test_shader);
 
 
 			render_context->swapBuffers();
@@ -138,7 +148,7 @@ private:
 	std::unique_ptr<Logger> internal_logger;
 
 
-	GL::Uint test_buffer, test_vao;
+	//GL::Uint test_buffer, test_vao;
 	Mat4 test_model, test_view, test_projection;
 
 };
