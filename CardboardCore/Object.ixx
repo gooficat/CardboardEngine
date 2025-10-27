@@ -6,7 +6,7 @@ import std;
 
 export class Transform {
 public:
-	Vec3 position;
+	Vec3 position; // experimental intellisense flagging this despite it being fully functional. Pay no heed.
 	Vec3 rotation;
 	Vec3 scale;
 

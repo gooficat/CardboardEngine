@@ -60,7 +60,7 @@ public:
 			data[i] = v[i];
 		}
 	}
-	Vec<n> operator[] (uint8_t i) {
+	Vec<n>& operator[] (uint8_t i) {
 		return data[i];
 	}
 	float *get() {
@@ -116,22 +116,29 @@ public:
 	static Mat4 translate(Vec3 t) {
 		return Mat4(std::array<Vec<4>, 4>{
 			Vec<4>({ 1, 0, 0, 0 }),
-				Vec<4>({ 0, 1, 0, 0 }),
-				Vec<4>({ 0, 0, 1, 0 }),
-				Vec<4>({ t.x, t.y, t.z, 1 })
+			Vec<4>({ 0, 1, 0, 0 }),
+			Vec<4>({ 0, 0, 1, 0 }),
+			Vec<4>({ t.x, t.y, t.z, 1 })
 		});
 	}
 	Mat4 operator * (Mat4 b) {
-		Mat4 result(0);
+		Mat4 result = Mat4::identity();
+		static int hasPrintedOut = 0;
+		hasPrintedOut++;
 
 		for (int i = 0; i != 4; ++i) {
 			for (int j = 0; j != 4; ++j) {
 				result[i][j] = 0;
 				for (int k = 0; k != 4; ++k) {
 					result[i][j] += this->data[i][k] * b[k][j];
+					if (hasPrintedOut == 100)
+						std::cout << this->data[i][k] << " " << b[k][j] << std::endl;
 				}
 			}
+
+			//std::cout << std::endl;
 		}
+		//std::cout << "\n" << std::endl;
 
 		return result;
 	}
