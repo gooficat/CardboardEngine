@@ -59,7 +59,7 @@ public:
 			0.5f, -0.5f, 0.0f,
 			0.0f, 0.5f, 0.0f
 		};
-		const GL::Char *vertexShaderSource = R"(
+		const GL::Char *vertexShaderSource = R"(#version 330 core
 			layout (location = 0) in vec3 a_pos;
 
 			uniform mat4 model;
@@ -67,12 +67,13 @@ public:
 			uniform mat4 projection;
 
 			void main() {
-				gl_Position = projection * model * vec4(a_pos, 1.0f);
+				gl_Position = projection * view * model * vec4(a_pos, 1.0f);
 			}
 		)";
-		const GL::Char *fragmentShaderSource = R"(
+		const GL::Char *fragmentShaderSource = R"(#version 330 core
+			out vec4 color;
 			void main() {
-				gl_FragColor = vec4(1.0f, 0.4f, 0.8f, 1.0f);
+				color = vec4(1.0f, 0.4f, 0.8f, 1.0f);
 			}
 		)";
 		Shader test_shader(vertexShaderSource, fragmentShaderSource);
