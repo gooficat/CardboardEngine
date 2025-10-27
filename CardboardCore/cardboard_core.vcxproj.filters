@@ -34,6 +34,12 @@
     <ClCompile Include="Shader.ixx">
       <Filter>Source Files\Render</Filter>
     </ClCompile>
+    <ClCompile Include="Mesh.ixx">
+      <Filter>Source Files\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.ixx">
+      <Filter>Source Files\Render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Resources">

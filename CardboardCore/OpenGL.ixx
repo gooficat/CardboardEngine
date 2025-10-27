@@ -51,6 +51,7 @@ export namespace GL {
 
 	Int (*getUniformLocation)(Uint program, const Char *name) = NULL;
 	void (*uniformMatrix4fv)(Int location, Sizei count, Boolean transpose, Float *value) = NULL;
+	void (*uniform1i)(Int location, Int value) = NULL;
 
 	void (*genBuffers)(Sizei count, Uint *buffers) = NULL;
 	void (*genVertexArrays)(Sizei count, Uint* buffers) = NULL;
@@ -64,7 +65,13 @@ export namespace GL {
 	void (*enableVertexAttribArray)(Uint index) = NULL;
 
 	void (*drawArrays)(Enum mode, Int offset, Sizei count) = NULL;
-	
+
+	void (*genTextures)(Sizei count, Uint* texture) = NULL;
+	void (*bindTexture)(Enum target, Uint texture) = NULL;
+	void (*texParameteri)(Enum target, Enum pname, Int param) = NULL;
+	void (*texImage2D)(Enum target, Int level, Int internal_format, Sizei width, Sizei height, Int border, Enum format, Enum type, const void *data) = NULL;
+	void (*generateMipmap)(Enum target) = NULL;
+
 
 	bool load(const std::unique_ptr<Logger>& logger) {
 		ASRT_PROC(viewport, "glViewport")
@@ -84,6 +91,7 @@ export namespace GL {
 		ASRT_PROC(getUniformLocation, "glGetUniformLocation")
 		
 		ASRT_PROC(uniformMatrix4fv, "glUniformMatrix4fv")
+		ASRT_PROC(uniform1i, "glUniform1i")
 
 		ASRT_PROC(genBuffers, "glGenBuffers")
 		ASRT_PROC(genVertexArrays, "glGenVertexArrays")
@@ -97,8 +105,12 @@ export namespace GL {
 
 		ASRT_PROC(drawArrays, "glDrawArrays")
 
+		ASRT_PROC(genTextures, "glGenTextures")
+		ASRT_PROC(bindTexture, "glBindTexture")
+		ASRT_PROC(texParameteri, "glTexParameteri")
 
-
+		ASRT_PROC(texImage2D, "glTexImage2D")
+		ASRT_PROC(generateMipmap, "glGenerateMipmap")
 		return true;
 	}
 

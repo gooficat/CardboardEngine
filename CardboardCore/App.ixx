@@ -10,6 +10,7 @@ import Logger;
 import Object;
 import Mathematics;
 import Shader;
+import Texture;
 
 import <memory>;
 
@@ -65,25 +66,32 @@ public:
 			uniform mat4 model;
 			uniform mat4 view;
 			uniform mat4 projection;
+			
+			out vec2 texPos;
 
 			void main() {
 				gl_Position = projection * view * model * vec4(a_pos, 1.0f);
+
+				texPos = a_pos.xy + vec2(0.5f, 0.5f);
 			}
 		)";
 		const GL::Char *fragmentShaderSource = R"(#version 330 core
 			out vec4 color;
+			uniform sampler2D diffuse;
+			in vec2 texPos;
 			void main() {
-				color = vec4(1.0f, 0.4f, 0.8f, 1.0f);
+				color = vec4(texture(diffuse, texPos).rgb, 1.0f);
 			}
 		)";
 		Shader test_shader(vertexShaderSource, fragmentShaderSource);
 
 		Transform test_transform;
 
-		test_projection = Mat4::simpleOrtho(4/3.0f, 1, 1);//orthographic(0, 2, 0, 2, 0, 2);
-		test_view = Mat4::identity();
+		test_projection = test_projection.simpleOrtho(4/3.0f, 1, 1);//orthographic(0, 2, 0, 2, 0, 2);
+		test_view = test_view.identity(); // this just quietens intellisense. Mat4::identity() and Mat4::simpleOrtho are static.
 		test_model = test_transform.getMatrix();
 
+		Texture tex("C:/Projects/CardboardEngine/CardboardCore/resources/DiamondPlate009_1K-PNG_Color.bmp", internal_logger);
 		GL::genVertexArrays(1, &test_vao);
 		GL::bindVertexArray(test_vao);
 		GL::genBuffers(1, &test_buffer);
@@ -101,6 +109,8 @@ public:
 			GL::clear(0x00004100);
 
 			test_shader.use();
+
+			tex.use(test_shader);
 
 			test_shader.setMat4("model", test_model);
 
