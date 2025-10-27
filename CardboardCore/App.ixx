@@ -55,12 +55,6 @@ public:
 		GL::viewport(0, 0, window->getWidth(), window->getHeight());
 		GL::clearColor(0.2f, 0.4f, 0.5f, 1.0f);
 
-
-		std::vector<GL::Float> vertices = {
-			-0.5f, -0.5f, 0.0f,
-			0.5f, -0.5f, 0.0f,
-			0.0f, 0.5f, 0.0f
-		};
 		const GL::Char *vertexShaderSource = R"(#version 330 core
 			layout (location = 0) in vec3 a_pos;
 
@@ -86,13 +80,26 @@ public:
 		)";
 		Shader test_shader(vertexShaderSource, fragmentShaderSource);
 
-		Transform test_transform;
+		Transform test_transform = { 0 };
 
-		test_projection = test_projection.simpleOrtho(4/3.0f, 1, 1);//orthographic(0, 2, 0, 2, 0, 2);
-		test_view = test_view.identity(); // this just quietens intellisense. Mat4::identity() and Mat4::simpleOrtho are static.
-		test_model = test_transform.getMatrix();
+		Vec3 cam_pos = { 0 };
+		cam_pos.z = 5;
 
-		Texture tex("C:/Projects/CardboardEngine/CardboardCore/resources/DiamondPlate009_1K-PNG_Color.bmp", internal_logger);
+		test_projection = Mat4::simpleOrtho(4/3.0f, 1, 20);//orthographic(0, 2, 0, 2, 0, 2);
+		test_view = Mat4::translation(cam_pos);// ignore after this====> // this just quietens intellisense. Mat4::identity() and Mat4::simpleOrtho are static so they would work as a non-method anyway.
+
+		Texture tex("C:/Projects/CardboardEngine/CardboardCore/resources/DiamondPlate009_1K-PNG_Color.bmp", "diffuse", internal_logger);
+
+		std::vector<GL::Float> vertices = {
+			-1, -1, 0,
+			 1, -1, 0,
+			 0,  1, 0
+		}; 
+		//std::vector<Vertex> verts = {
+		//	{{-1, -1, 0}, {0, 0}},
+		//	{{ 1, -1, 0}, {1, 0}},
+		//	{{ 0,  1, 0}, {.5,1}}
+		//};
 		std::vector<GL::Uint> indices = {
 			0, 1, 2
 		};
@@ -107,21 +114,51 @@ public:
 		//GL::vertexAttribPointer(0, 3, 0x1406, 0, 3 * sizeof(GL::Float), (void*)0);
 		//GL::bindVertexArray(0);
 
+		//test_transform.position.z = -5;
 
 
 		while (!event_handler->shouldQuit()) {
-			test_transform.rotation.x += 0.001f;
-			test_transform.rotation.y += 0.001f;
-			test_transform.position.y += 0.0001f;
 			test_model = test_transform.getMatrix();
+
 			GL::clear(0x00004100);
+
+			if (event_handler->isButtonDown(KeyCode::W)) {
+				test_transform.position.z -= 0.001f;
+			}
+			if (event_handler->isButtonDown(KeyCode::S)) {
+				test_transform.position.z += 0.001f;
+			}
+			if (event_handler->isButtonDown(KeyCode::D)) {
+				test_transform.position.x -= 0.001f;
+			}
+			if (event_handler->isButtonDown(KeyCode::A)) {
+				test_transform.position.x += 0.001f;
+			}
+			if (event_handler->isButtonDown(KeyCode::SPACE)) {
+				test_transform.position.y -= 0.001f;
+			}
+			if (event_handler->isButtonDown(KeyCode::SHIFT)) {
+				test_transform.position.y += 0.001f;
+			}
+
+			if (event_handler->isButtonDown(KeyCode::LEFT)) {
+				test_transform.rotation.y -= 0.001f;
+			}
+			if (event_handler->isButtonDown(KeyCode::RIGHT)) {
+				test_transform.rotation.y += 0.001f;
+			}
+			if (event_handler->isButtonDown(KeyCode::UP)) {
+				test_transform.rotation.x -= 0.001f;
+			}
+			if (event_handler->isButtonDown(KeyCode::DOWN)) {
+				test_transform.rotation.y += 0.001f;
+			}
 
 			test_shader.use();
 
 			tex.use(test_shader);
 
 			test_shader.setMat4("model", test_model);
-
 			test_shader.setMat4("view", test_view);
 			test_shader.setMat4("projection", test_projection);
 

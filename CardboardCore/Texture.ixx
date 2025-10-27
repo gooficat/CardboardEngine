@@ -11,8 +11,9 @@ import Shader;
 export class Texture {
 public:
 	GL::Uint ID;
-	const GL::Char *name;
-	Texture(const std::string& path, std::unique_ptr<Logger>& logger) {
+	const GL::Char* name;
+	Texture(const std::string& path, const GL::Char *name, std::unique_ptr<Logger>& logger) :
+		name(name) {
 		uint8_t header[54];
 		uint32_t data_pos;
 		uint32_t width, height;
@@ -65,8 +66,8 @@ public:
 		GL::generateMipmap(0x0DE1);
 	}
 
-	void use(Shader& shader) {
+	void use(Shader& shader) const {
+		//shader.setInt(name, ID);
 		GL::bindTexture(0x0DE1, ID);
-		//shader.setInt("diffuse", ID);
 	}
 };

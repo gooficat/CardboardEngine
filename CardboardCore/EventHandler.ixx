@@ -14,9 +14,14 @@ export enum EventType {
 	MouseMove, MouseScroll
 };
 
-export enum class KeyCode {
+export enum KeyCode {
+	SHIFT = 0x10,
 	ESC = 0x1B,
 	SPACE = 0x20,
+	LEFT = 0x25,
+	UP,
+	RIGHT,
+	DOWN,
 	N0 = 0x30,
 	N1,
 	N2,
@@ -61,7 +66,7 @@ export enum class KeyCode {
 
 export class EventHandler {
 public:
-	EventHandler() {
+	EventHandler() : keys{ false } {
 		onKeyDown = [](uint8_t, int64_t){};
 		onKeyUp = [](int64_t, int64_t) {};
 
@@ -85,15 +90,21 @@ public:
 			Window::active_instance->height = HIWORD(l_param);
 			RenderContext::active_instance->resize(LOWORD(l_param), HIWORD(l_param));
 			return 0;
+		case WM_KEYDOWN:
+			EventHandler::active_instance->keys[w_param] = true;
+			return 0;
+		case WM_KEYUP:
+			EventHandler::active_instance->keys[w_param] = false;
+			return 0;
 		default:
 			return DefWindowProcA(h_wnd, u_msg, w_param, l_param);
 		}
 	}
-	bool isButtonDown(uint8_t code) {
-		return GetKeyState(code);
+	bool isButtonDown(const uint8_t& code) const {
+		return keys[code];
 	}
 	
-	bool shouldQuit() {
+	bool shouldQuit() const {
 		return quit_requested;
 	}
 	
@@ -119,4 +130,5 @@ private:
 	inline static EventHandler* active_instance;
 
 	bool quit_requested;
+	bool keys[256];
 };

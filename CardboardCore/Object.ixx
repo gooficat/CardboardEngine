@@ -8,23 +8,16 @@ export class Transform {
 public:
 	Vec3 position; // experimental intellisense flagging this despite it being fully functional. Pay no heed.
 	Vec3 rotation;
-	Vec3 scale;
-
-	Transform() :
-		position({ 0, 0, 0 }), rotation({ 0, 0, 0 }), scale({ 1, 1, 1 }) {
-
-	}
+	//Vec3 scale;
 
 	Mat4 getMatrix() {
-		Mat4 m = Mat4::identity();
-		//m = m * Mat4::translate(position);
-		m = m * Mat4::rotationX(rotation.x);
-		//m = m * Mat4::rotationY(rotation.y);
-		//m = m * Mat4::rotationZ(rotation.z);
-		//m = ;
-		//m = Mat4::scale(scale) * m;
+		Mat4 rx = Mat4::rotationX(rotation.x);
+		Mat4 ry = Mat4::rotationY(rotation.y);
+		Mat4 rz = Mat4::rotationZ(rotation.z);
 
-		return m;
+		Mat4 mt = Mat4::translation(position);
+
+		return rz * ry * rx * mt; // no scaling until needed
 	}
 };
 

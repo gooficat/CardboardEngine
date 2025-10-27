@@ -24,7 +24,7 @@ public:
 	}
 
 	void setMat4(const GL::Char * name, Mat4& data) {
-		GL::uniformMatrix4fv(GL::getUniformLocation(ID, name), 1, 0, data.get());
+		GL::uniformMatrix4fv(GL::getUniformLocation(ID, name), 1, 0, &data[0]);
 	}
 	void setInt(const GL::Char * name, GL::Int data) {
 		GL::uniform1i(GL::getUniformLocation(ID, name), data);
