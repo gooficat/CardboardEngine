@@ -15,178 +15,67 @@ import Mesh;
 
 import <memory>;
 
+namespace Cardboard
+{
+	export class App
+	{
+	public:
+		App() :
+			internal_logger( std::make_unique<Logger>(
+				"x64/Debug/logs/internal_log.txt"
+			) )
+		{
+			App::active_instance = this;
 
-export class App {
-public:
-	App() :
-		internal_logger(std::make_unique<Logger>(
-			"C:\\Projects\\CardboardEngine\\x64\\Debug\\logs\\internal_log.txt"
-		)) {
-		App::active_instance = this;
+			this->event_handler = std::make_unique<EventHandler>(
 
-		this->event_handler = std::make_unique<EventHandler>(
-			
-		);
-		
-		PixelFormat pixel_format = RenderContext::generateFormat();
+			);
 
-		this->window = std::make_unique<Window>(
-			WindowSpec {
-				" ",
-				640,
-				360
-			},
-			EventHandler::MessageHandler,
-			this->internal_logger
-		);
-		this->render_context = std::make_unique<RenderContext>(
-			window->getHandle(),
-			this->internal_logger,
-			window->getFormat()
-		);
-		window->show();
-		
-		run();
-	}
+			PixelFormat pixel_format = RenderContext::generateFormat();
 
-	void run() {
-		internal_logger->log("Application launched, now running.", LOG_MESSAGE);
-
-		GL::viewport(0, 0, window->getWidth(), window->getHeight());
-		GL::clearColor(0.2f, 0.4f, 0.5f, 1.0f);
-
-		const GL::Char *vertexShaderSource = R"(#version 330 core
-			layout (location = 0) in vec3 a_pos;
-			layout (location = 1) in vec2 a_tex_coords;
-
-			uniform mat4 model;
-			uniform mat4 view;
-			uniform mat4 projection;
-			
-			out vec2 tex_pos;
-
-			void main() {
-				gl_Position = projection * view * model * vec4(a_pos, 1.0f);
-
-				tex_pos = a_tex_coords;
-			}
-		)";
-		const GL::Char *fragmentShaderSource = R"(#version 330 core
-			out vec4 color;
-			uniform sampler2D diffuse;
-			in vec2 tex_pos;
-			void main() {
-				color = texture(diffuse, tex_pos);
-			}
-		)";
-		Shader test_shader(vertexShaderSource, fragmentShaderSource);
-
-		Transform test_transform = { 0 };
-
-		Vec3 cam_pos = { 0 };
-		cam_pos.z = 5;
-
-		test_projection = Mat4::simpleOrtho(4/3.0f, 1, 20);//orthographic(0, 2, 0, 2, 0, 2);
-		test_view = Mat4::translation(cam_pos);// ignore after this====> // this just quietens intellisense. Mat4::identity() and Mat4::simpleOrtho are static so they would work as a non-method anyway.
-
-		Texture tex("C:/Projects/CardboardEngine/CardboardCore/resources/DiamondPlate009_1K-PNG_Color.bmp", "diffuse", internal_logger);
-
-		//std::vector<GL::Float> vertices = {
-		//	-1, -1, 0,
-		//	 1, -1, 0,
-		//	 0,  1, 0
-		//}; 
-		std::vector<Vertex> positions = {
-			{{-1, -1, 0}, {0, 0}},
-			{{ 1, -1, 0}, {1, 0}},
-			{{ 0,  1, 0}, {.5,1}}
-		};
-		std::vector<GL::Uint> indices = {
-			0, 1, 2
-		};
-		Mesh mesh(positions, indices);
-		
-		//GL::genVertexArrays(1, &test_vao);
-		//GL::bindVertexArray(test_vao);
-		//GL::genBuffers(1, &test_buffer);
-		//GL::bindBuffer(0x8892, test_buffer);
-		//GL::bufferData(0x8892, 9 * sizeof(GL::Float), &vertices[0], 0x88E4);
-		//GL::enableVertexAttribArray(0);
-		//GL::vertexAttribPointer(0, 3, 0x1406, 0, 3 * sizeof(GL::Float), (void*)0);
-		//GL::bindVertexArray(0);
-
-		//test_transform.position.z = -5;
-
-
-		while (!event_handler->shouldQuit()) {
-			test_model = test_transform.getMatrix();
-
-			GL::clear(0x00004100);
-
-			if (event_handler->isButtonDown(KeyCode::W)) {
-				test_transform.position.z -= 0.001f;
-			}
-			if (event_handler->isButtonDown(KeyCode::S)) {
-				test_transform.position.z += 0.001f;
-			}
-			if (event_handler->isButtonDown(KeyCode::D)) {
-				test_transform.position.x -= 0.001f;
-			}
-			if (event_handler->isButtonDown(KeyCode::A)) {
-				test_transform.position.x += 0.001f;
-			}
-			if (event_handler->isButtonDown(KeyCode::SPACE)) {
-				test_transform.position.y -= 0.001f;
-			}
-			if (event_handler->isButtonDown(KeyCode::SHIFT)) {
-				test_transform.position.y += 0.001f;
-			}
-
-			if (event_handler->isButtonDown(KeyCode::LEFT)) {
-				test_transform.rotation.y -= 0.001f;
-			}
-			if (event_handler->isButtonDown(KeyCode::RIGHT)) {
-				test_transform.rotation.y += 0.001f;
-			}
-			if (event_handler->isButtonDown(KeyCode::UP)) {
-				test_transform.rotation.x -= 0.001f;
-			}
-			if (event_handler->isButtonDown(KeyCode::DOWN)) {
-				test_transform.rotation.y += 0.001f;
-			}
-
-			test_shader.use();
-
-			tex.use(test_shader);
-
-			test_shader.setMat4("model", test_model);
-			test_shader.setMat4("view", test_view);
-			test_shader.setMat4("projection", test_projection);
-
-			//GL::bindVertexArray(test_vao);
-			//GL::drawArrays(0x0004, 0, 3);
-			//std::cout << "I'm in a loop!" << std::endl;
-
-			mesh.draw(test_shader);
-
-
-			render_context->swapBuffers();
-			event_handler->pollEvents();
+			this->window = std::make_unique<Window>(
+				WindowSpec {
+					" ",
+					640,
+					360
+				},
+				EventHandler::MessageHandler,
+				this->internal_logger
+			);
+			this->render_context = std::make_unique<RenderContext>(
+				window->getHandle(),
+				this->internal_logger,
+				window->getFormat()
+			);
+			window->show();
 		}
-	}
-	
-	std::unique_ptr<EventHandler> event_handler;
 
-	std::unique_ptr<Window> window;
+		void run()
+		{
 
-	std::unique_ptr<RenderContext> render_context;
+			while ( !event_handler->shouldQuit() )
+			{
 
-	inline static App *active_instance;
-private:
-	std::unique_ptr<Logger> internal_logger;
+				render_context->swapBuffers();
+				event_handler->pollEvents();
+			}
+		}
+
+		std::unique_ptr<EventHandler> event_handler;
+
+		std::unique_ptr<Window> window;
+
+		std::unique_ptr<RenderContext> render_context;
+
+		inline static App* active_instance;
+
+		static App* createApp();
+	private:
+		std::unique_ptr<Logger> internal_logger;
 
 
-	//GL::Uint test_buffer, test_vao;
-	Mat4 test_model, test_view, test_projection;
+		//GL::Uint test_buffer, test_vao;
+		Mat4 test_model, test_view, test_projection;
 
-};
+	};
+}

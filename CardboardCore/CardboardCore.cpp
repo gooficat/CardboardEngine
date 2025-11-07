@@ -1,5 +1,8 @@
 import App;
 
-int main() {
-	App* app = new App();
+int main()
+{
+	auto* app = Cardboard::App::createApp();
+	app->run();
+	return 0;
 }

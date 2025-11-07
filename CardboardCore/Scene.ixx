@@ -3,10 +3,16 @@ import std;
 
 import Object;
 
-export class Scene {
-public:
 
-	
-private:
+namespace Cardboard
+{
+	export class Scene
+	{
+	public:
 
-};
+
+	private:
+
+	};
+
+}

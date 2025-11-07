@@ -40,6 +40,9 @@
     <ClCompile Include="Texture.ixx">
       <Filter>Source Files\Render</Filter>
     </ClCompile>
+    <ClCompile Include="SpriteRenderer.ixx">
+      <Filter>Source Files\Render\2D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Resources">
@@ -51,6 +54,9 @@
     <Filter Include="Source Files\Render">
       <UniqueIdentifier>{6f6d084b-163d-4e6d-998e-eecaa359133d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Render\2D">
+      <UniqueIdentifier>{1ef70edd-e9e1-4ca8-937d-b9bc6f99bfac}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleVertexShader.glsl">
@@ -61,5 +67,16 @@
     <ClInclude Include="Api.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="CardboardCore.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\..\..\Downloads\dungeon_sheet.bmp">
+      <Filter>Resources</Filter>
+    </Image>
+    <Image Include="resources\DiamondPlate009_1K-PNG_Color.bmp">
+      <Filter>Resources</Filter>
+    </Image>
   </ItemGroup>
 </Project>

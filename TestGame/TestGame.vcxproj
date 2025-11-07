@@ -21,10 +21,9 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{a4b820aa-e0bc-4961-b21a-da61cd8f0a9b}</ProjectGuid>
-    <RootNamespace>cardboardcore</RootNamespace>
+    <ProjectGuid>{9ad649ee-642d-41bc-a873-399158634f48}</ProjectGuid>
+    <RootNamespace>TestGame</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>CardboardCore</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -41,11 +40,10 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
-    <EnableASAN>false</EnableASAN>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -106,16 +104,12 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdclatest</LanguageStandard_C>
-      <BuildStlModules>false</BuildStlModules>
-      <UseDynamicDebugging>false</UseDynamicDebugging>
-      <Optimization>Disabled</Optimization>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <EnableModules>false</EnableModules>
+      <AdditionalIncludeDirectories>$(SolutionDir)/CardboardCore;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -133,33 +127,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="App.ixx">
-      <EnableModules Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EnableModules>
-    </ClCompile>
-    <ClCompile Include="CardboardCore.cpp" />
-    <ClCompile Include="EventHandler.ixx" />
-    <ClCompile Include="Logger.ixx" />
-    <ClCompile Include="Mathematics.ixx" />
-    <ClCompile Include="Mesh.ixx" />
-    <ClCompile Include="Object.ixx" />
-    <ClCompile Include="OpenGL.ixx" />
-    <ClCompile Include="RenderContext.ixx" />
-    <ClCompile Include="Scene.ixx" />
-    <ClCompile Include="Shader.ixx" />
-    <ClCompile Include="SpriteRenderer.ixx" />
-    <ClCompile Include="Texture.ixx" />
-    <ClCompile Include="Window.ixx" />
+    <ProjectReference Include="..\CardboardCore\cardboard_core.vcxproj">
+      <Project>{a4b820aa-e0bc-4961-b21a-da61cd8f0a9b}</Project>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Api.h" />
-    <ClInclude Include="CardboardCore.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="SimpleVertexShader.glsl" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\..\..\..\..\Downloads\dungeon_sheet.bmp" />
-    <Image Include="resources\DiamondPlate009_1K-PNG_Color.bmp" />
+    <ClCompile Include="TestGame.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
