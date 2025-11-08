@@ -47,6 +47,9 @@ export namespace GL
 	Uint ( *shaderSource )( Uint shader, Sizei count, const Char** string, const Int* length ) = NULL;
 	Uint ( *compileShader )( Uint shader ) = NULL;
 
+	Uint ( *deleteShader )( Uint shader ) = NULL;
+
+
 	Uint ( *createProgram )( ) = NULL;
 	Uint ( *attachShader )( Uint shader, Uint program ) = NULL;
 	Uint ( *linkProgram )( Uint program ) = NULL;
@@ -54,6 +57,7 @@ export namespace GL
 
 	Int ( *getUniformLocation )( Uint program, const Char* name ) = NULL;
 	void ( *uniformMatrix4fv )( Int location, Sizei count, Boolean transpose, Float* value ) = NULL;
+	void ( *uniform2fv )( Int location, Sizei count, Boolean transpose, Float* value ) = NULL;
 	void ( *uniform1i )( Int location, Int value ) = NULL;
 
 	void ( *genBuffers )( Sizei count, Uint* buffers ) = NULL;
@@ -61,6 +65,9 @@ export namespace GL
 
 	void ( *bindBuffer )( Enum target, Uint buffer ) = NULL;
 	void ( *bufferData )( Enum target, Sizeiptr size, const void* data, Enum usage ) = NULL;
+
+	void ( *deleteBuffers )( Sizei count, Uint* buffers ) = NULL;
+	void ( *deleteVertexArrays )( Sizei count, Uint* buffers ) = NULL;
 
 	void ( *bindVertexArray )( Uint array ) = NULL;
 
@@ -76,6 +83,8 @@ export namespace GL
 	void ( *texImage2D )( Enum target, Int level, Int internal_format, Sizei width, Sizei height, Int border, Enum format, Enum type, const void* data ) = NULL;
 	void ( *generateMipmap )( Enum target ) = NULL;
 
+	void ( *deleteTextures )( Sizei count, Uint* texture ) = NULL;
+
 
 	bool load( const std::unique_ptr<Cardboard::Logger>& logger )
 	{
@@ -87,6 +96,8 @@ export namespace GL
 			ASRT_PROC( shaderSource, "glShaderSource" )
 			ASRT_PROC( compileShader, "glCompileShader" )
 
+			ASRT_PROC( deleteShader, "glDeleteShader" )
+
 			ASRT_PROC( createProgram, "glCreateProgram" )
 			ASRT_PROC( attachShader, "glAttachShader" )
 			ASRT_PROC( linkProgram, "glLinkProgram" )
@@ -96,10 +107,15 @@ export namespace GL
 			ASRT_PROC( getUniformLocation, "glGetUniformLocation" )
 
 			ASRT_PROC( uniformMatrix4fv, "glUniformMatrix4fv" )
+			ASRT_PROC( uniform2fv, "glUniform2fv" )
+
 			ASRT_PROC( uniform1i, "glUniform1i" )
 
 			ASRT_PROC( genBuffers, "glGenBuffers" )
 			ASRT_PROC( genVertexArrays, "glGenVertexArrays" )
+
+			ASRT_PROC( deleteBuffers, "glGenBuffers" )
+			ASRT_PROC( deleteVertexArrays, "glGenVertexArrays" )
 
 			ASRT_PROC( bindVertexArray, "glBindVertexArray" )
 
@@ -117,6 +133,10 @@ export namespace GL
 
 			ASRT_PROC( texImage2D, "glTexImage2D" )
 			ASRT_PROC( generateMipmap, "glGenerateMipmap" )
+
+			ASRT_PROC( deleteTextures, "glDeleteTextures" )
+
+
 			return true;
 	}
 

@@ -62,6 +62,12 @@
     <None Include="SimpleVertexShader.glsl">
       <Filter>Resources</Filter>
     </None>
+    <None Include="SpriteVertexShader.glsl">
+      <Filter>Resources</Filter>
+    </None>
+    <None Include="SpriteFragmentShader.glsl">
+      <Filter>Resources</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Api.h">

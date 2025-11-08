@@ -36,6 +36,10 @@ namespace Cardboard
 		{
 			GL::uniform1i( GL::getUniformLocation( ID, name ), data );
 		}
+		void setVec2( const GL::Char* name, Vec2& data )
+		{
+			GL::uniform2fv( GL::getUniformLocation( ID, name ), 1, 0, &data.x );
+		}
 	private:
 	};
 

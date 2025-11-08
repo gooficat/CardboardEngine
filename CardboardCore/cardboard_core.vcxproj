@@ -156,6 +156,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleVertexShader.glsl" />
+    <None Include="SpriteFragmentShader.glsl" />
+    <None Include="SpriteVertexShader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\..\..\Downloads\dungeon_sheet.bmp" />

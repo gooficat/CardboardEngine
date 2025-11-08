@@ -23,6 +23,9 @@ namespace Cardboard
 		App() :
 			internal_logger( std::make_unique<Logger>(
 				"x64/Debug/logs/internal_log.txt"
+			) ),
+			logger( std::make_unique<Logger>(
+				"x64/Debug/logs/log.txt"
 			) )
 		{
 			App::active_instance = this;
@@ -50,12 +53,18 @@ namespace Cardboard
 			window->show();
 		}
 
+		virtual void customOnDrawStuff()
+		{
+
+		}
+
 		void run()
 		{
 
 			while ( !event_handler->shouldQuit() )
 			{
-
+				GL::clear( 0x4000 | 0x100 );
+				customOnDrawStuff();
 				render_context->swapBuffers();
 				event_handler->pollEvents();
 			}
@@ -70,6 +79,9 @@ namespace Cardboard
 		inline static App* active_instance;
 
 		static App* createApp();
+
+		std::unique_ptr<Logger> logger;
+
 	private:
 		std::unique_ptr<Logger> internal_logger;
 
